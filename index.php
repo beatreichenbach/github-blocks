@@ -21,11 +21,19 @@ function github_list_repos_render_block( $block_attributes, $content ) {
 	if ( false == $username )
 		return null;
 
-	$url = 'https://api.github.com/users/' . $username . '/repos';
 
+
+
+	$url = 'https://api.github.com/users/' . $username . '/repos';
 	$profile_url = 'https://github.com/' . $username;
 
-	$content = file_get_contents($url);
+	$context = stream_context_create(array(
+		'http' => array(
+			'method' => 'GET',
+			'header' => array('User-Agent: PHP')
+			)
+		));
+	$content = file_get_contents($url, false, $context);
 
 	if ( false === $content )
 		return null;
@@ -46,34 +54,34 @@ function github_list_repos_render_block( $block_attributes, $content ) {
 
 	$html = '<ol class="github-list">';
 	foreach ($repos as $repo) {
-        $date = new DateTime($repo->updated_at);
-        $date_title = $date->format('M d, Y, h:i A');
-        $date_text = $date->format('M d, Y');
-        $stargaze_url = $repo->html_url . '/stargazers';
-        if( isset( $colors ) )
-        	$color = $colors->{$repo->language}->color;
-        else
-        	$color = 'white';
+		$date = new DateTime($repo->updated_at);
+		$date_title = $date->format('M d, Y, h:i A');
+		$date_text = $date->format('M d, Y');
+		$stargaze_url = $repo->html_url . '/stargazers';
+		if( isset( $colors ) )
+			$color = $colors->{$repo->language}->color;
+		else
+			$color = 'white';
 
-        $html .= '
-            <li class="github-list-item">
-                <div class="github-repo">
-                    <div class="github-repo-title">
-                        <a href="' . $repo->html_url . '" class="">' . $repo->name . '</a>
-                    </div>
-                    <p class="github-repo-description">' . $repo->description . '</p>
-                    <p class="github-repo-tags">
-                        <span class="github-repo-language github-repo-tag">
-                            <span class="github-repo-language-color" style="background-color: ' . $color . '"></span>
-                            <span class="github-repo-language-text">' . $repo->language . '</span>
-                        </span>
-                        <a href="' . $stargaze_url . '" class="github-repo-stargazers github-repo-tag">
-                            ' . $star_svg . $repo->stargazers_count . '
-                        </a>
-                        Updated <relative-time datetime="' . $repo->updated_at . '" class="no-wrap" title="' . $date_title . '">on ' . $date_text . '</relative-time>
-                    </p>
-                </div>
-            </li>';
+		$html .= '
+			<li class="github-list-item">
+				<div class="github-repo">
+					<div class="github-repo-title">
+						<a href="' . $repo->html_url . '" class="">' . $repo->name . '</a>
+					</div>
+					<p class="github-repo-description">' . $repo->description . '</p>
+					<p class="github-repo-tags">
+						<span class="github-repo-language github-repo-tag">
+							<span class="github-repo-language-color" style="background-color: ' . $color . '"></span>
+							<span class="github-repo-language-text">' . $repo->language . '</span>
+						</span>
+						<a href="' . $stargaze_url . '" class="github-repo-stargazers github-repo-tag">
+							' . $star_svg . $repo->stargazers_count . '
+						</a>
+						Updated <relative-time datetime="' . $repo->updated_at . '" class="no-wrap" title="' . $date_title . '">on ' . $date_text . '</relative-time>
+					</p>
+				</div>
+			</li>';
 	}
 
 	$html .= '</ol>';
@@ -83,7 +91,7 @@ function github_list_repos_render_block( $block_attributes, $content ) {
 		$html .= '<div class="wp-block-button"><a href="' . $profile_url . '" class="github-profile">GitHub Profile</a></div>';
 	}
 
-   	$html = sprintf( '<div %s>%s</div>', $blockProps, $html );
+	$html = sprintf( '<div %s>%s</div>', $blockProps, $html );
 	return $html;
 }
 
