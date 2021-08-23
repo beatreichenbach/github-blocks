@@ -1,0 +1,42 @@
+.github-list {
+	list-style: none;
+}
+
+.github-list, .github-list-item {
+	margin: 0 auto 1.25em;
+	padding: 0;
+}
+
+.github-repo {
+	padding: 1.25rem;
+}
+
+.github-repo-title {
+	font-weight: bold;
+}
+
+.github-repo-description {
+	margin: 0.5rem 0 1rem;
+}
+
+.github-repo-tag svg {
+	height: 1.2em;
+	fill: currentColor;
+	vertical-align: text-bottom;
+}
+
+.github-repo-tags {
+	font-size: 0.75em;
+}
+
+.github-repo-tag {
+	margin-right: 1.25rem;
+	text-decoration: none;
+}
+
+.github-repo-language-color {
+	display: inline-block;
+	width: .75em;
+	height: .75em;
+	border-radius: 1em;
+}
