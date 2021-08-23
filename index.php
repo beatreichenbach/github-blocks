@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: GitHub
- * Plugin URI: https://github.com/beatreichenbach
+ * Plugin URI: https://github.com/beatreichenbach/github-blocks
  * Description: A collection of blocks to integrate GitHub into WordPress.
  * Version: 1.0.0
  * Author: Beat Reichenbach
