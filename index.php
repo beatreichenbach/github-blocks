@@ -21,9 +21,6 @@ function github_list_repos_render_block( $block_attributes, $content ) {
 	if ( false == $username )
 		return null;
 
-
-
-
 	$url = 'https://api.github.com/users/' . $username . '/repos';
 	$profile_url = 'https://github.com/' . $username;
 
@@ -38,6 +35,18 @@ function github_list_repos_render_block( $block_attributes, $content ) {
 	if ( false === $content )
 		return null;
 	$repos = json_decode($content);
+
+	function sort_by_creation($a, $b) {
+		if( $a->created_at > $b->created_at ) {
+			return 1;
+		} else if( $a->created_at < $b->created_at ) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+
+	usort($repos, 'sort_by_creation');
 
 	// get color data for repo languages
 	$colordata = file_get_contents(plugins_url( 'colors.json', __FILE__ ) );
